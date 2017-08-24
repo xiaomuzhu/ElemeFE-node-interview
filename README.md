@@ -1,233 +1,267 @@
-## 导读
+# 你可能真的不懂JavaScript中最基础类型
 
-本仓库的内容是基于饿了么大前端的[node-interview](https://github.com/ElemeFE/node-interview).
+---
 
-饿了么大前端对Node的知识点进行了总结,笔者以这些知识点为线索通过搜集资料以及实验做出了如下的解答,作为自己补充Node.js相关知识的途径.
+#### 前言
+　　众所周知,JavaScript是动态弱类型的多范式编程语言,由于设计时的粗糙(当时设计js的初衷就是在浏览器中处理表单这种简单事件)导致JavaScript在许多方面表现出了这样或者那样的问题,其中'类型'便是语法层面最常见的'埋坑'重灾区.
+　　
+> JavaScript原始类型:Undefined、Null、Boolean、Number、String、Symbol 
+JavaScript引用类型:Object 
 
-## Js 基础问
+---
 
-> 与前端 Js 不同, 后端是直面服务器的, 更加偏向内存方面.
+#### 1.原始类型与引用类型
 
-* [`[Basic]` 类型判断](/JavaScript基础/JavaScript基本类型.md)
-* [`[Basic]` 作用域](/sections/zh-cn/common.md#作用域)
-* [`[Basic]` 引用传递](/sections/zh-cn/common.md#引用传递)
-* [`[Basic]` 内存释放](/sections/zh-cn/common.md#内存释放)
-* [`[Basic]` ES6 新特性](/sections/zh-cn/common.md#es6-新特性)
+###### 1.1
+　　**原始类型**又被称为**基本类型**，原始类型保存的变量和值直接保存在**栈内存**(Stack)中,且空间相互独立,通过值来访问,说到这里肯定一同懵逼,不过我们可以通过一个例子来解释.
 
-**常见问题**
+```
+var person = 'Messi';
+var person1 = person;
+```
+上述代码在栈内存的示意图是这样的,可以看到,虽然`person`赋值给了`person1`.但是两个变量并没有指向同一个值,而是`person1`自己单独建立一个内存空间,虽然两个变量的值相等,但却是相互独立的.
+![](http://p1.bqimg.com/567571/11993c9e172c8684.png)
 
-* js 中什么类型是引用传递, 什么类型是值传递? 如何将值类型的变量以引用的方式传递? [[more]](/sections/zh-cn/common.md#q-value)
-* js 中， 0.1 + 0.2 === 0.3 是否为 true ? 在不知道浮点数位数时应该怎样判断两个浮点数之和与第三数是否相等？
-* const 定义的 Array 中间元素能否被修改? 如果可以, 那 const 修饰对象的意义是? [[more]](/sections/zh-cn/common.md#q-const)
-* JavaScript 中不同类型以及不同环境下变量的内存都是何时释放? [[more]](/sections/zh-cn/common.md#q-mem)
+```
+var person = 'Messi';
+var person1 = person;
 
-[阅读更多](/sections/zh-cn/common.md)
+var person = 1;
 
-## [模块](/sections/zh-cn/module.md)
+console.log(person); //1
+console.log(person1); //'Messi'
 
-* [`[Basic]` 模块机制](/sections/zh-cn/module.md#模块机制)
-* [`[Basic]` 热更新](/sections/zh-cn/module.md#热更新)
-* [`[Basic]` 上下文](/sections/zh-cn/module.md#上下文)
-* [`[Basic]` 包管理](/sections/zh-cn/module.md#包管理)
+```
+上述代码示意图是这样的,`person`的值虽然改变,但是由于`person1`的值是独立储存的,因此不受影响.
+![](http://p1.bqimg.com/567571/72d29c309b1d75ce.png)
 
-**常见问题**
+值得一提的是,虽然原始类型的值是储存在相对独立空间,但是它们之间的比较是**按值**比较的.
 
-* a.js 和 b.js 两个文件互相 require 是否会死循环? 双方是否能导出变量? 如何从设计上避免这种问题? [[more]](/sections/zh-cn/module.md#q-loop)
-* 如果 a.js require 了 b.js, 那么在 b 中定义全局变量 `t = 111` 能否在 a 中直接打印出来? [[more]](/sections/zh-cn/module.md#q-global)
-* 如何在不重启 node 进程的情况下热更新一个 js/json 文件? 这个问题本身是否有问题? [[more]](/sections/zh-cn/module.md#q-hot)
-
-[阅读更多](/sections/zh-cn/module.md)
-
-## [事件/异步](/sections/zh-cn/event-async.md)
-
-* [`[Basic]` Promise](/sections/zh-cn/event-async.md#promise)
-* [`[Doc]` Events (事件)](/sections/zh-cn/event-async.md#events)
-* [`[Doc]` Timers (定时器)](/sections/zh-cn/event-async.md#timers)
-* [`[Point]` 阻塞/异步](/sections/zh-cn/event-async.md#阻塞异步)
-* [`[Point]` 并行/并发](/sections/zh-cn/event-async.md#并行并发)
-
-**常见问题**
-
-* Promise 中 .then 的第二参数与 .catch 有什么区别? [[more]](/sections/zh-cn/event-async.md#q-1)
-* Eventemitter 的 emit 是同步还是异步? [[more]](/sections/zh-cn/event-async.md#q-2)
-* 如何判断接口是否异步? 是否只要有回调函数就是异步? [[more]](/sections/zh-cn/event-async.md#q-3)
-* nextTick, setTimeout 以及 setImmediate 三者有什么区别? [[more]](/sections/zh-cn/event-async.md#q-4)
-* 如何实现一个 sleep 函数? [[more]](/sections/zh-cn/event-async.md#q-5)
-* 如何实现一个异步的 reduce? (注:不是异步完了之后同步 reduce) [[more]](/sections/zh-cn/event-async.md#q-6)
-
-[阅读更多](/sections/zh-cn/event-async.md)
-
-## [进程](/sections/zh-cn/process.md)
-
-* [`[Doc]` Process (进程)](/sections/zh-cn/process.md#process)
-* [`[Doc]` Child Processes (子进程)](/sections/zh-cn/process.md#child-process)
-* [`[Doc]` Cluster (集群)](/sections/zh-cn/process.md#cluster)
-* [`[Basic]` 进程间通信](/sections/zh-cn/process.md#进程间通信)
-* [`[Basic]` 守护进程](/sections/zh-cn/process.md#守护进程)
-
-**常见问题**
-
-* 进程的当前工作目录是什么? 有什么作用? [[more]](/sections/zh-cn/process.md#q-cwd)
-* child_process.fork 与 POSIX 的 fork 有什么区别? [[more]](/sections/zh-cn/process.md#q-fork)
-* 父进程或子进程的死亡是否会影响对方? 什么是孤儿进程? [[more]](/sections/zh-cn/process.md#q-child)
-* cluster 是如何保证负载均衡的? [[more]](/sections/zh-cn/process.md#how-it-works)
-* 什么是守护进程? 如何实现守护进程? [[more]](/sections/zh-cn/process.md#守护进程)
-
-[阅读更多](/sections/zh-cn/process.md)
+```
+var person = 'Messi';
+var person1 = 'Messi';
+console.log(person === person1); //true
+```
 
 
-## [IO](/sections/zh-cn/io.md)
+###### 1.2引用类型
 
-* [`[Doc]` Buffer](/sections/zh-cn/io.md#buffer)
-* [`[Doc]` String Decoder (字符串解码)](/sections/zh-cn/io.md#string-decoder)
-* [`[Doc]` Stream (流)](/sections/zh-cn/io.md#stream)
-* [`[Doc]` Console (控制台)](/sections/zh-cn/io.md#console)
-* [`[Doc]` File System (文件系统)](/sections/zh-cn/io.md#file)
-* [`[Doc]` Readline](/sections/zh-cn/io.md#readline)
-* [`[Doc]` REPL](/sections/zh-cn/io.md#repl)
+剩下的就是引用类型了,即Object 类型,再往下细分，还可以分为：Object 类型、Array 类型、Date 类型、Function 类型 等。
 
-**常见问题**
+与原始类型不同的是,引用类型的内容是保存在**堆内存**中,而**栈内存**(Heap)中会有一个**堆内存地址**,通过这个地址变量被指向堆内存中`Object`真正的值,因此引用类型是按照引用访问的.
+![](http://p1.bpimg.com/567571/ade18e93a9f9e9cb.png)
 
-* Buffer 一般用于处理什么数据? 其长度能否动态变化? [[more]](/sections/zh-cn/io.md#buffer)
-* Stream 的 highWaterMark 与 drain 事件是什么? 二者之间的关系是? [[more]](/sections/zh-cn/io.md#缓冲区)
-* Stream 的 pipe 的作用是? 在 pipe 的过程中数据是引用传递还是拷贝传递? [[more]](/sections/zh-cn/io.md#pipe)
-* 什么是文件描述符? 输入流/输出流/错误流是什么? [[more]](/sections/zh-cn/io.md#file)
-* console.log 是同步还是异步? 如何实现一个 console.log? [[more]](/sections/zh-cn/io.md#console)
-* 如何同步的获取用户的输入?  [[more]](/sections/zh-cn/io.md#如何同步的获取用户的输入)
-* Readline 是如何实现的? (有思路即可) [[more]](/sections/zh-cn/io.md#readline)
+由于示意图太难画,我从网上找了一个例子,能很清楚的说明引用类型的特质.
 
-[阅读更多](/sections/zh-cn/io.md)
+```
+var a = {name:"percy"};
+var b;
+b = a;
+a.name = "zyj";
+console.log(b.name);    // zyj
+b.age = 22;
+console.log(a.age);     // 22
+var c = {
+  name: "zyj",
+  age: 22
+};
+console.log(a === c); //false
 
-## [Network](/sections/zh-cn/network.md)
+```
 
-* [`[Doc]` Net (网络)](/sections/zh-cn/network.md#net)
-* [`[Doc]` UDP/Datagram](/sections/zh-cn/network.md#udp)
-* [`[Doc]` HTTP](/sections/zh-cn/network.md#http)
-* [`[Doc]` DNS (域名服务器)](/sections/zh-cn/network.md#dns)
-* [`[Doc]` ZLIB (压缩)](/sections/zh-cn/network.md#zlib)
-* [`[Point]` RPC](/sections/zh-cn/network.md#rpc)
+我们可以逐行分析:
+    1. `b = a`,如果是原始类型的话,`b`会在栈内自己独自创建一个内存空间保存值,但是引用类型只是`b`的产生一个对内存地址,指向堆内存中的`Object`.
+    2.`a.name = "zyj"`,这个操作属于改变了变量的值,在原始类型中会重新建立新的内存空间(可以看上一节的示意图),而引用类型只需要自己在堆内存中更新自己的属性即可.
+    3.最后创建了一个新的对象`c`,看似跟`b` `a`一样,但是在堆内存中确实两个相互独立的`Object`,引用类型是按照**引用比较**,由于`a` `c`引用的是不同的`Object`所以得到的结果是`fasle`.  
+![](http://i1.piimg.com/567571/86af0de8deea6301.png)
 
-**常见问题**
+---
+#### 2. 类型中的坑
 
-* cookie 与 session 的区别? 服务端如何清除 cookie? [[more]](/sections/zh-cn/network.md#q-cookie-session)
-* HTTP 协议中的 POST 和 PUT 有什么区别? [[more]](/sections/zh-cn/network.md#q-post-put)
-* 什么是跨域请求? 如何允许跨域? [[more]](/sections/zh-cn/network.md#q-cors)
-* TCP/UDP 的区别? TCP 粘包是怎么回事，如何处理? UDP 有粘包吗? [[more]](/sections/zh-cn/network.md#q-tcp-udp)
-* `TIME_WAIT` 是什么情况? 出现过多的 `TIME_WAIT` 可能是什么原因? [[more]](/sections/zh-cn/network.md#q-time-wait)
-* ECONNRESET 是什么错误? 如何复现这个错误?
-* socket hang up 是什么意思? 可能在什么情况下出现? [[more]](/sections/zh-cn/network.md#socket-hang-up)
-* hosts 文件是什么? 什么叫 DNS 本地解析?
-* 列举几个提高网络传输速度的办法?
+2.1 数组中的坑
+数组是JavaScript中最常见的类型之一了,但是在我们实践过程中同样会遇到各种各样的麻烦.
 
-[阅读更多](/sections/zh-cn/network.md)
+**稀疏数组**:指的是含有空白或空缺单元的数组
+```
+var a = [];
 
-## [OS](/sections/zh-cn/os.md)
+console.log(a.length); //0
 
-* [`[Doc]` TTY](/sections/zh-cn/os.md#tty)
-* [`[Doc]` OS (操作系统)](/sections/zh-cn/os.md#os-1)
-* [`[Doc]` Path](/sections/zh-cn/os.md#path)
-* [`[Doc]` 命令行参数](/sections/zh-cn/os.md#命令行参数)
-* [`[Basic]` 负载](/sections/zh-cn/os.md#负载)
-* [`[Point]` CheckList](/sections/zh-cn/os.md#checklist)
+a[4] = a[5];
 
-**常见问题**
+console.log(a.length); //5
 
-* 什么是 TTY? 如何判断是否处于 TTY 环境? [[more]](/sections/zh-cn/os.md#tty)
-* 不同操作系统的换行符 (EOL) 有什么区别? [[more]](/sections/zh-cn/os.md#os)
-* 服务器负载是什么概念? 如何查看负载? [[more]](/sections/zh-cn/os.md#负载)
-* ulimit 是用来干什么的? [[more]](/sections/zh-cn/os.md#ulimit)
+a.forEach(elem => {
+  console.log(elem); //undefined
+});
 
-[阅读更多](/sections/zh-cn/os.md)
+console.log(a); //[,,,,undefined]
+```
+这里有几个坑需要注意:
+1. 一开始建立的空数组`a`的长度为0,这可以理解,但是在`a[4] = a[5]`之后出现了问题,`a`的长度居然变成了5,此时`a`数组是`[,,,,undefined]`这种形态.
+2. 我们通过遍历,只得到了`undefined`这一个值,这个`undefind`是由于`a[4] = a[5]`赋值,由于`a[5]`没有定义值为`undefined`被赋给了`a[4]`,可以等价为`a[4] = undefined`.
 
-## [错误处理/调试](/sections/zh-cn/error.md)
+**字符串索引**
 
-* [`[Doc]` Errors (异常)](/sections/zh-cn/error.md#errors)
-* [`[Doc]` Domain (域)](/sections/zh-cn/error.md#domain)
-* [`[Doc]` Debugger (调试器)](/sections/zh-cn/error.md#debugger)
-* [`[Doc]` C/C++ 插件](/sections/zh-cn/error.md#c-c++-addon)
-* [`[Doc]` V8](/sections/zh-cn/error.md#v8)
-* [`[Point]` 内存快照](/sections/zh-cn/error.md#内存快照)
-* [`[Point]` CPU profiling](/sections/zh-cn/error.md#cpu-profiling)
+```
+var a = [];
+a[0] = 'Bale';
+a['age'] = 28;
+console.log(a.length); //1
+console.log(a['age']); //28
+console.log(a); //[ 'Bale', age: 28 ]
+```
+数组不仅可以通过数字索引,也可以通过字符串索引,但值得注意的是,字符串索引的键值对并不算在数组的长度里.
 
-**常见问题**
 
-* 怎么处理未预料的出错? 用 try/catch ，domains 还是其它什么? [[more]](/sections/zh-cn/error.md#q-handle-error)
-* 什么是 `uncaughtException` 事件? 一般在什么情况下使用该事件? [[more]](/sections/zh-cn/error.md#uncaughtexception)
-* domain 的原理是? 为什么要弃用 domain? [[more]](/sections/zh-cn/error.md#domain)
-* 什么是防御性编程? 与其相对的 let it crash 又是什么?
-* 为什么要在 cb 的第一参数传 error? 为什么有的 cb 第一个参数不是 error, 例如 http.createServer?
-* 为什么有些异常没法根据报错信息定位到代码调用? 如何准确的定位一个异常? [[more]](/sections/zh-cn/error.md#错误栈丢失)
-* 内存泄漏通常由哪些原因导致? 如何分析以及定位内存泄漏? [[more]](/sections/zh-cn/error.md#内存快照)
+2.2 数字中的坑
+**二进制浮点数**
 
-[阅读更多](/sections/zh-cn/error.md)
+JavaScript 中的数字类型是基于“二进制浮点数”实现的,使用的是“双精度”格式,这就带来了一些反常的问题,我们那一道经典面试提来讲解下.
+```
+var a = 0.1 + 0.2;
+var b = 0.3;
+console.log(a === b); //false
+```
+这是个出人意料的结果,实际上a的值约为`0.30000000000000004`这并不是一个整数值,这就是`二进制浮点数`带来的副作用.
 
-## [测试](/sections/zh-cn/test.md)
+```
+var a = 0.1 + 0.2;
+var b = 0.3;
+console.log(a === b); //false
+console.log(Number.isInteger(a*10)); //false
+console.log(Number.isInteger(b*10)); //true
+console.log(a); //0.30000000000000004
+```
+我们可以用`Number.isInteger()`来判断一个数字是否为整数.
 
-* [`[Basic]` 测试方法](/sections/zh-cn/test.md#测试方法)
-* [`[Basic]` 单元测试](/sections/zh-cn/test.md#单元测试)
-* [`[Basic]` 集成测试](/sections/zh-cn/test.md#集成测试)
-* [`[Basic]` 基准测试](/sections/zh-cn/test.md#基准测试)
-* [`[Basic]` 压力测试](/sections/zh-cn/test.md#压力测试)
-* [`[Doc]` Assert (断言)](/sections/zh-cn/test.md#assert)
+**NaN**
 
-**常见问题**
+```
+var a = 1/new Object();
+console.log(typeof a); //Number
+console.log(a); //NaN
+console.log(isNaN(a)); //true
+```
+`NaN`属于特殊的`Number`类型,我们可以把它理解为`坏数值`,因为它属于数值计算中的错误,更加特殊的是它自己都不等价于自己`NaN === NaN //false`,我们只能用`isNaN()`来检测一个数字是否为`NaN`.
 
-* 为什么要写测试? 写测试是否会拖累开发进度?[[more]](/sections/zh-cn/test.md#q-why-write-test)
-* 单元测试的单元是指什么? 什么是覆盖率?[[more]](/sections/zh-cn/test.md#单元测试)
-* 测试是如何保证业务逻辑中不会出现死循环的?[[more]](/sections/zh-cn/test.md#q-death-loop)
-* mock 是什么? 一般在什么情况下 mock?[[more]](/sections/zh-cn/test.md#mock)
 
-[阅读更多](/sections/zh-cn/test.md)
 
-## [util](/sections/zh-cn/util.md)
+---
+#### 3.类型转换原理
 
-* [`[Doc]` URL](/sections/zh-cn/util.md#url)
-* [`[Doc]` Query Strings (查询字符串)](/sections/zh-cn/util.md#query-strings)
-* [`[Doc]` Utilities (实用函数)](/sections/zh-cn/util.md#util-1)
-* [`[Basic]` 正则表达式](/sections/zh-cn/util.md#正则表达式)
+**类型转换**指的是将一种类型转换为另一种类型,例如:
+```
+var b = 2;
+var a = String(b);
+console.log(typeof a); //string
+```
 
-**常见问题**
+当然,**类型转换**分为显式和隐式,但是不管是隐式转换还是显式转换,都会遵循一定的原理,由于JavaScript是一门动态类型的语言,可以随时赋予任意值,但是各种运算符或条件判断中是需要特定类型的,因此JavaScript引擎会在运算时为变量设定类型.
 
-* HTTP 如何通过 GET 方法 (URL) 传递 let arr = [1,2,3,4] 给服务器? [[more]](/sections/zh-cn/util.md#get-param)
-* Node.js 中继承 (util.inherits) 的实现? [[more]](/sections/zh-cn/util.md#utilinherits)
-* 如何递归获取某个文件夹下所有的文件名? [[more]](/sections/zh-cn/util.md#q-traversal)
+这看起来很美好,JavaScript引擎帮我们搞定了`类型`的问题,但是引擎毕竟不是ASI(超级人工智能),它的很多动作会跟我们预期相去甚远,我们可以从一到面试题开始.
 
-[阅读更多](/sections/zh-cn/util.md)
+```
+{}+[] //0
+```
 
-## [存储](/sections/zh-cn/storage.md)
 
-* [`[Point]` Mysql](/sections/zh-cn/storage.md#mysql)
-* [`[Point]` Mongodb](/sections/zh-cn/storage.md#mongodb)
-* [`[Point]` Replication](/sections/zh-cn/storage.md#replication)
-* [`[Point]` 数据一致性](/sections/zh-cn/storage.md#数据一致性)
-* [`[Point]` 缓存](/sections/zh-cn/storage.md#缓存)
+答案是0,下图是在`node 7.7.2`版本测试下的结果,浏览器测试结果同上.  
+![](http://p1.bqimg.com/567571/8bd81ae2ea2f3921.png)
 
-**常见问题**
+是什么原因造成了上述结果呢?那么我们得从ECMA-262中提到的转换规则和抽象操作说起,有兴趣的童鞋可以仔细阅读下这浩如烟海的[语言规范](http://ecma-international.org/ecma-262/5.1/),如果没这个耐心还是往下看.
 
-* 备份数据库与 M/S, M/M 等部署方式的区别? [[more]](/sections/zh-cn/storage.md#replication)
-* 索引有什么用，大致原理是什么? 设计索引有什么注意点? [[more]](/sections/zh-cn/storage.md#索引)
-* Monogdb 连接问题(超时/断开等)有可能是什么问题导致的? [[more]](/sections/zh-cn/storage.md#Mongodb)
-* 什么情况下数据会出现脏数据? 如何避免? [[more]](/sections/zh-cn/storage.md#数据一致性)
-* redis 与 memcached 的区别? [[more]](/sections/zh-cn/storage.md#缓存)
+这是JavaScript种类型转换可以从**原始类型**转为**引用类型**,同样可以将**引用类型**转为**原始类型**,转为原始类型的抽象操作为`ToPrimitive`,而后续更加细分的操作为:`ToNumber ToString ToBoolean`,这三种抽象操作的转换表如下所示
+|值 |ToNumber|ToString |ToBoolean|
+|:---:|:---:|:---:|:---:|
+|undefined|	NaN|“undefined”|false|
+|null|	0|	“null”|	false|
+|true|	1|	“true”|	 
+|false|	0|	“false”	| 
+|0	 	|“0”	|false|
+|-0	 |	“0”|	false|
+|NaN	 |	“NaN”|	false|
+|Infinity|	 	|“Infinity”|	true|
+|-Infinity|	 	|”-Infinity”|	true|
+|1(非零)|	 |	“1”	|true|
+|`[ ](空数组)`|	0|	””|	true|
+|`[9](包含一个数字元素)`|	9|	“9”|	true|
 
-[阅读更多](/sections/zh-cn/storage.md)
 
-## [安全](/sections/zh-cn/security.md)
+如果想应付面试,我觉得这张表就差不多了,但是为了更深入的探究JavaScript引擎是如何处理代码中类型转换问题的,就需要看 ECMA-262详细的规范,从而探究其内部原理,我们从这段内部原理示意代码开始.
+```
+// ECMA-262, section 9.1, page 30. Use null/undefined for no hint,
+// (1) for number hint, and (2) for string hint.
+function ToPrimitive(x, hint) {  
+  // Fast case check.
+  if (IS_STRING(x)) return x;
+  // Normal behavior.
+  if (!IS_SPEC_OBJECT(x)) return x;
+  if (IS_SYMBOL_WRAPPER(x)) throw MakeTypeError(kSymbolToPrimitive);
+  if (hint == NO_HINT) hint = (IS_DATE(x)) ? STRING_HINT : NUMBER_HINT;
+  return (hint == NUMBER_HINT) ? DefaultNumber(x) : DefaultString(x);
+}
 
-* [`[Doc]` Crypto (加密)](/sections/zh-cn/security.md#crypto)
-* [`[Doc]` TLS/SSL](/sections/zh-cn/security.md#tlsssl)
-* [`[Doc]` HTTPS](/sections/zh-cn/security.md#https)
-* [`[Point]` XSS](/sections/zh-cn/security.md#xss)
-* [`[Point]` CSRF](/sections/zh-cn/security.md#csrf)
-* [`[Point]` 中间人攻击](/sections/zh-cn/security.md#中间人攻击)
-* [`[Point]` Sql/Nosql 注入](/sections/zh-cn/security.md#sqlnosql-注入)
+// ECMA-262, section 8.6.2.6, page 28.
+function DefaultNumber(x) {  
+  if (!IS_SYMBOL_WRAPPER(x)) {
+    var valueOf = x.valueOf;
+    if (IS_SPEC_FUNCTION(valueOf)) {
+      var v = %_CallFunction(x, valueOf);
+      if (IsPrimitive(v)) return v;
+    }
 
-**常见问题**
+    var toString = x.toString;
+    if (IS_SPEC_FUNCTION(toString)) {
+      var s = %_CallFunction(x, toString);
+      if (IsPrimitive(s)) return s;
+    }
+  }
+  throw MakeTypeError(kCannotConvertToPrimitive);
+}
 
-* 加密是如何保证用户密码的安全性? [[more]](/sections/zh-cn/security.md#crypto)
-* TLS 与 SSL 有什么区别? [[more]](/sections/zh-cn/security.md#tlsssl)
-* HTTPS 能否被劫持? [[more]](/sections/zh-cn/security.md#https)
-* XSS 攻击是什么? 有什么危害? [[more]](/sections/zh-cn/security.md#xss)
-* 过滤 Html 标签能否防止 XSS? 请列举不能的情况? [[more]](/sections/zh-cn/security.md#xss)
-* CSRF 是什么? 如何防范? [[more]](/sections/zh-cn/security.md#csrf)
-* 如何避免中间人攻击? [[more]](/sections/zh-cn/security.md#中间人攻击)
+// ECMA-262, section 8.6.2.6, page 28.
+function DefaultString(x) {  
+  if (!IS_SYMBOL_WRAPPER(x)) {
+    var toString = x.toString;
+    if (IS_SPEC_FUNCTION(toString)) {
+      var s = %_CallFunction(x, toString);
+      if (IsPrimitive(s)) return s;
+    }
+
+    var valueOf = x.valueOf;
+    if (IS_SPEC_FUNCTION(valueOf)) {
+      var v = %_CallFunction(x, valueOf);
+      if (IsPrimitive(v)) return v;
+    }
+  }
+  throw MakeTypeError(kCannotConvertToPrimitive);
+}
+```
+上面代码的逻辑是这样的：
+
+1. 如果变量为字符串，直接返回.
+2. 如果`!IS_SPEC_OBJECT(x)`，直接返回.
+3. 如果`IS_SYMBOL_WRAPPER(x)`，则抛出异常.
+4. 否则会根据传入的`hint`来调用`DefaultNumber`和`DefaultString`，比如如果为`Date`对象，会调用`DefaultString`.
+5. `DefaultNumber`：首`先x.valueOf`，如果为`primitive`，则返回`valueOf`后的值，否则继续调用`x.toString`，如果为`primitive`，则返回`toString`后的值，否则抛出异常
+6. `DefaultString`：和`DefaultNumber`正好相反，先调用`toString`，如果不是`primitive`再调用`valueOf`.
+
+那讲了实现原理，这个`ToPrimitive`有什么用呢？实际很多操作会调用`ToPrimitive`，比如加、相等或比较操。在进行加操作时会将左右操作数转换为`primitive`，然后进行相加。
+
+下面来个实例，({}) + 1（将{}放在括号中是为了内核将其认为一个代码块）会输出啥？可能日常写代码并不会这样写，不过网上出过类似的面试题。
+
+加操作只有左右运算符同时为`String或Number`时会执行对应的`%_StringAdd或%NumberAdd`，下面看下`({}) + 1`内部会经过哪些步骤：
+
+`{}`和`1`首先会调用ToPrimitive
+`{}`会走到`DefaultNumber`，首先会调用`valueOf`，返回的是`Object` `{}`，不是primitive类型，从而继续走到`toString`，返回`[object Object]`，是`String`类型
+最后加操作，结果为`[object Object]1`
+再比如有人问你`[] + 1`输出啥时，你可能知道应该怎么去计算了，先对`[]`调用`ToPrimitive`，返回空字符串，最后结果为"1"。
+
+
+---
+本文主要参考：
+1. [JavaScript 类型的那些事](https://segmentfault.com/a/1190000010352325)
+
+
+
