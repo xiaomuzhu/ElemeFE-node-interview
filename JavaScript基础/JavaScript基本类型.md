@@ -17,14 +17,14 @@ JavaScript引用类型:Object
 ###### 1.1
 　　**原始类型**又被称为**基本类型**，原始类型保存的变量和值直接保存在**栈内存**(Stack)中,且空间相互独立,通过值来访问,说到这里肯定一同懵逼,不过我们可以通过一个例子来解释.
 
-```
+```javascript
 var person = 'Messi';
 var person1 = person;
 ```
 上述代码在栈内存的示意图是这样的,可以看到,虽然`person`赋值给了`person1`.但是两个变量并没有指向同一个值,而是`person1`自己单独建立一个内存空间,虽然两个变量的值相等,但却是相互独立的.
 ![](http://p1.bqimg.com/567571/11993c9e172c8684.png)
 
-```
+```javascript
 var person = 'Messi';
 var person1 = person;
 
@@ -39,7 +39,7 @@ console.log(person1); //'Messi'
 
 值得一提的是,虽然原始类型的值是储存在相对独立空间,但是它们之间的比较是**按值**比较的.
 
-```
+```javascript
 var person = 'Messi';
 var person1 = 'Messi';
 console.log(person === person1); //true
@@ -55,7 +55,7 @@ console.log(person === person1); //true
 
 由于示意图太难画,我从网上找了一个例子,能很清楚的说明引用类型的特质.
 
-```
+```javascript
 var a = {name:"percy"};
 var b;
 b = a;
@@ -84,7 +84,7 @@ console.log(a === c); //false
 数组是JavaScript中最常见的类型之一了,但是在我们实践过程中同样会遇到各种各样的麻烦.
 
 **稀疏数组**:指的是含有空白或空缺单元的数组
-```
+```javascript
 var a = [];
 
 console.log(a.length); //0
@@ -105,7 +105,7 @@ console.log(a); //[,,,,undefined]
 
 **字符串索引**
 
-```
+```javascript
 var a = [];
 a[0] = 'Bale';
 a['age'] = 28;
@@ -120,14 +120,14 @@ console.log(a); //[ 'Bale', age: 28 ]
 **二进制浮点数**
 
 JavaScript 中的数字类型是基于“二进制浮点数”实现的,使用的是“双精度”格式,这就带来了一些反常的问题,我们那一道经典面试提来讲解下.
-```
+```javascript
 var a = 0.1 + 0.2;
 var b = 0.3;
 console.log(a === b); //false
 ```
 这是个出人意料的结果,实际上a的值约为`0.30000000000000004`这并不是一个整数值,这就是`二进制浮点数`带来的副作用.
 
-```
+```javascript
 var a = 0.1 + 0.2;
 var b = 0.3;
 console.log(a === b); //false
@@ -139,7 +139,7 @@ console.log(a); //0.30000000000000004
 
 **NaN**
 
-```
+```javascript
 var a = 1/new Object();
 console.log(typeof a); //Number
 console.log(a); //NaN
@@ -153,7 +153,7 @@ console.log(isNaN(a)); //true
 #### 3.类型转换原理
 
 **类型转换**指的是将一种类型转换为另一种类型,例如:
-```
+```javascript
 var b = 2;
 var a = String(b);
 console.log(typeof a); //string
@@ -163,7 +163,7 @@ console.log(typeof a); //string
 
 这看起来很美好,JavaScript引擎帮我们搞定了`类型`的问题,但是引擎毕竟不是ASI(超级人工智能),它的很多动作会跟我们预期相去甚远,我们可以从一到面试题开始.
 
-```
+```javascript
 {}+[] //0
 ```
 
@@ -191,7 +191,7 @@ console.log(typeof a); //string
 
 
 如果想应付面试,我觉得这张表就差不多了,但是为了更深入的探究JavaScript引擎是如何处理代码中类型转换问题的,就需要看 ECMA-262详细的规范,从而探究其内部原理,我们从这段内部原理示意代码开始.
-```
+```javascript
 // ECMA-262, section 9.1, page 30. Use null/undefined for no hint,
 // (1) for number hint, and (2) for string hint.
 function ToPrimitive(x, hint) {  
