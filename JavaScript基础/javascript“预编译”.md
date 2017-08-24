@@ -168,7 +168,7 @@ function f() {
 var f ='g';
 ```
 结果如下,函数声明将覆盖变量声明.
-
+`[Function: f]`
 ---
 #### 7.ES6中的let
 
