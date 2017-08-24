@@ -1,5 +1,7 @@
 # 你可能真的不懂JavaScript中最基础类型
 
+标签（空格分隔）： 类型 JavaScript
+
 ---
 
 #### 前言
@@ -72,10 +74,8 @@ console.log(a === c); //false
 我们可以逐行分析:
     1. `b = a`,如果是原始类型的话,`b`会在栈内自己独自创建一个内存空间保存值,但是引用类型只是`b`的产生一个对内存地址,指向堆内存中的`Object`.
     2.`a.name = "zyj"`,这个操作属于改变了变量的值,在原始类型中会重新建立新的内存空间(可以看上一节的示意图),而引用类型只需要自己在堆内存中更新自己的属性即可.
-    3.最后创建了一个新的对象`c`,看似跟`b` `a`一样,但是在堆内存中确实两个相互独立的`Object`,引用类型是按照引用比较,由于`a` `c`引用的是不同的`Object`所以得到的结果是`fasle`.
+    3.最后创建了一个新的对象`c`,看似跟`b` `a`一样,但是在堆内存中确实两个相互独立的`Object`,引用类型是按照**引用比较**,由于`a` `c`引用的是不同的`Object`所以得到的结果是`fasle`.  
 ![](http://i1.piimg.com/567571/86af0de8deea6301.png)
-
-
 
 ---
 #### 2. 类型中的坑
@@ -94,14 +94,14 @@ a[4] = a[5];
 console.log(a.length); //5
 
 a.forEach(elem => {
-  console.log(elem); //undefind
+  console.log(elem); //undefined
 });
 
-console.log(a); //[,,,,undefind]
+console.log(a); //[,,,,undefined]
 ```
 这里有几个坑需要注意:
-1. 一开始建立的空数组`a`的长度为0,这可以理解,但是在`a[4] = a[5]`之后出现了问题,`a`的长度居然变成了5,此时`a`数组是`[,,,,undefind]`这种形态.
-2. 我们通过遍历,只得到了`undefind`这一个值,这个`undefind`是由于`a[4] = a[5]`赋值,由于`a[5]`没有定义值为`undefind`被赋给了`a[4]`,可以等价为`a[4] = undefind`.
+1. 一开始建立的空数组`a`的长度为0,这可以理解,但是在`a[4] = a[5]`之后出现了问题,`a`的长度居然变成了5,此时`a`数组是`[,,,,undefined]`这种形态.
+2. 我们通过遍历,只得到了`undefined`这一个值,这个`undefind`是由于`a[4] = a[5]`赋值,由于`a[5]`没有定义值为`undefined`被赋给了`a[4]`,可以等价为`a[4] = undefined`.
 
 **字符串索引**
 
@@ -168,7 +168,7 @@ console.log(typeof a); //string
 ```
 
 
-答案是0,下图是在`node 7.7.2`版本测试下的结果,浏览器测试结果同上.
+答案是0,下图是在`node 7.7.2`版本测试下的结果,浏览器测试结果同上.  
 ![](http://p1.bqimg.com/567571/8bd81ae2ea2f3921.png)
 
 是什么原因造成了上述结果呢?那么我们得从ECMA-262中提到的转换规则和抽象操作说起,有兴趣的童鞋可以仔细阅读下这浩如烟海的[语言规范](http://ecma-international.org/ecma-262/5.1/),如果没这个耐心还是往下看.
@@ -249,24 +249,21 @@ function DefaultString(x) {
 5. `DefaultNumber`：首`先x.valueOf`，如果为`primitive`，则返回`valueOf`后的值，否则继续调用`x.toString`，如果为`primitive`，则返回`toString`后的值，否则抛出异常
 6. `DefaultString`：和`DefaultNumber`正好相反，先调用`toString`，如果不是`primitive`再调用`valueOf`.
 
+那讲了实现原理，这个`ToPrimitive`有什么用呢？实际很多操作会调用`ToPrimitive`，比如加、相等或比较操。在进行加操作时会将左右操作数转换为`primitive`，然后进行相加。
 
+下面来个实例，({}) + 1（将{}放在括号中是为了内核将其认为一个代码块）会输出啥？可能日常写代码并不会这样写，不过网上出过类似的面试题。
 
+加操作只有左右运算符同时为`String或Number`时会执行对应的`%_StringAdd或%NumberAdd`，下面看下`({}) + 1`内部会经过哪些步骤：
 
-
-
-
-
-
----
-
-
-
----
-
+`{}`和`1`首先会调用ToPrimitive
+`{}`会走到`DefaultNumber`，首先会调用`valueOf`，返回的是`Object` `{}`，不是primitive类型，从而继续走到`toString`，返回`[object Object]`，是`String`类型
+最后加操作，结果为`[object Object]1`
+再比如有人问你`[] + 1`输出啥时，你可能知道应该怎么去计算了，先对`[]`调用`ToPrimitive`，返回空字符串，最后结果为"1"。
 
 
 ---
-
+本文主要参考：
+1. [JavaScript 类型的那些事](https://segmentfault.com/a/1190000010352325)
 
 
 
