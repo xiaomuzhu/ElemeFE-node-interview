@@ -80,23 +80,23 @@ obj.f(); // Messi
 　　除了极少数的宿主函数之外,所有的函数都拥有`call` `apply`方法,而这两个大家既熟悉又陌生的方法可以强制改变`this`的指向,从而实现显式绑定.
 
 `call` `apply`可以产生对`this`相同的绑定效果,唯一的区别便是他们参数传入的方式不同.
->**call方法**: 
-**语法**：call([thisObj[,arg1[, arg2[,   [,.argN]]]]]) 
-**定义**：调用一个对象的一个方法，以另一个对象替换当前对象。 
-**说明**： 
+>**call方法**:   
+**语法**：call([thisObj[,arg1[, arg2[,   [,.argN]]]]])   
+**定义**：调用一个对象的一个方法，以另一个对象替换当前对象。   
+**说明**：   
 　　call 方法可以用来代替另一个对象调用一个方法。call 方法可将一个函数的对象上下文从初始的上下文改变为由 thisObj 指定的新对象。 
 　　如果没有提供 thisObj 参数，那么 Global 对象被用作 thisObj。 
 
 
->**apply方法**： 
-**语法**：apply([thisObj[,argArray]]) 
-**定义**：应用某一对象的一个方法，用另一个对象替换当前对象。 
+>**apply方法**：   
+**语法**：apply([thisObj[,argArray]])   
+**定义**：应用某一对象的一个方法，用另一个对象替换当前对象。   
 **说明**： 
-　　如果 argArray 不是一个有效的数组或者不是 arguments 对象，那么将导致一个 TypeError。 
+　　如果 argArray 不是一个有效的数组或者不是 arguments 对象，那么将导致一个 TypeError。   
 如果没有提供 argArray 和 thisObj 任何一个参数，那么 Global 对象将被用作 thisObj， 并且无法被传递任何参数。
 
 
-　　第一个参数意义都一样。第二个参数：apply传入的是一个参数数组，也就是将多个参数组合成为一个数组传入，而`call`则作为`call`的参数传入（从第二个参数开始）。
+　　第一个参数意义都一样。第二个参数：apply传入的是一个参数数组，也就是将多个参数组合成为一个数组传入，而`call`则作为`call`的参数传入（从第二个参数开始）。  
 　　如 `func.call(func1,var1,var2,var3)`  对应的`apply`写法为：`func.apply(func1,[var1,var2,var3])`，同时使用`apply`的好处是可以直接将当前函数的`arguments`对象作为`apply`的第二个参数传入。 　
 
 ```javascript
