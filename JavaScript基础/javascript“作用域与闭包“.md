@@ -1,7 +1,5 @@
 # JavaScript面向对象之作用域
 
-标签（空格分隔）： JavaScript 作用域
-
 ---
 #### 1. 为什么要理解作用域  
 
@@ -15,7 +13,7 @@
 > 动态作用域:程序中某个变量所引用的对象是在程序运行时刻根据程序的控制流信息来确定的。
 
 大多数现代编程语言都采用的静态作用域,即代码在写出来的时候就已经确定的,并非在执行时再确定,我们可以根据以下代码一探究竟.
-```javascript
+```
 function f() {
   console.log(a);
 }
@@ -26,7 +24,7 @@ function g() {
 g(); // a is not defined
 ```
 这段代码在执行时候会报错,很明显,如果JavaScript采用了动态作用域,`a`在执行时确定的话,那么以上代码相当于这样:
-```javascript
+```
 function g() {
     var a = 7;
     function f() {
@@ -41,7 +39,7 @@ g(); //undefind
 ---
 #### 3.函数作用域
 大家都知道,函数是JavaScript的一等公民,那么函数是存在自身作用域的,在创建函数之初,函数体内就产生了作用域,为了方便理解,我们引用了《你不知道的JavaScript》书中的代码及图例,他会很清晰地帮助我们理解函数作用域.
-```javascript
+```
 function foo(a) {
     var b = a * 2;
     function bar(c) {
@@ -60,47 +58,18 @@ foo(2); // 2, 4, 12
 
 #### 4.作用域链
 
-那么,我们可以仔细分析一下这个作用域的生成过程.
+那么,我们可以仔细分析一下这个作用域链. 
+![](http://omrbgpqyl.bkt.clouddn.com/17-8-25/32385127.jpg)
+我们可以看到`scope chain`通过指向本函数的变量对象,并通过本函数的变量对象与整个父级函数变量对象联系在一起,这就是作用域链.
 
-首先我们分析一下函数foo:
-
-函数`foo`在这个嵌套函数体的最外层,在V8预编译这个`foo`后,创建`foo`函数时给此函数添加了一个成员`scopeChain`,这个`scopeChain`指向创建此`foo`的执行环境(由于是在全局环境下创建,因此指向Window或者Global).
-
-在`foo`被创建后,它会形成自身的执行环境.
-```javascript
-我们可以把这个创建foo的过程简单地表示为: foo.executionContext.scopeChain -> window.executionContext{...},即foo的scopeChain指向创建它的window的执行环境.
-同时:
-foo.executionContext.variableObject{
-        arguments: {
-            0: 2,
-            length: 1
-        },
-        a: 2,
-        bar: pointer to function bar()
-}
-
-同理,`bar`创建时:
-bar.executionContext = {
-    scopeChain: { pointer to foo.executionContext },
-    variableObject: {
-        arguments: {
-            0: 12,
-            length: 1
-        },
-        b: 12,
-    },
-    this: { ... }
-}
-
-```
-在函数执行过程中,`bar`在自身执行环境中为变量abc赋值,但是发现`ab`都为`undefind`,但是它可以通过`bar.executionContext.scopeChain -> foo.executionContext `这个链条向上寻找父级执行环境中的变量,直到找到赋值对象或者到达顶层也就是window,为其赋值,这就是作用域链.
+所以说，作用域链与一个执行上下文相关，是**内部上下文所有变量对象（包括父变量对象）**的**列表**，用于变量查询。
 
 ---
 
 #### 5. 块级作用域
 
 在ES2015之前,JavaScript中实际上是没有语法层面的块级作用域,这就造成了很多意外的产生.
-```javascript
+```
 for (var i = 0; i<3; i++) {
 
 }
@@ -125,8 +94,30 @@ console.log(i); //i is not defind
 ```
 至于其它let的具体用法,可以直接参考[《ES6入门教程》](http://es6.ruanyifeng.com/#docs/let).
 
+---
 
+#### 6.什么是闭包
 
+我们先简单地描述一下闭包:闭包是一个函数读取其它函数变量的桥梁.
+
+我们先从上面这个简单的例子开始
+```
+function foo(a) {
+    var b = a * 2;
+    function bar(c) {
+        console.log(a, b, c);
+    }
+    bar(b * 3);
+}
+foo(2); // 2, 4, 12
+```
+根据前面所学作用域的概念,函数`f2`将引用函数`f1`的变量`a`并打印,这个嵌套函数中,子函数对父函数中的变量进行了引用,而使得这个引用得以成行的桥梁就是**'闭包'**.
+> * 很多讲解闭包的文章都用`return`做实例,值得注意的是,闭包的形成并不一定要有`return`,只要对其它函数变量产生了引用,就会产生闭包，而`return`的作用是方便外部访问.  
+
+可以看到bar通过作用域链向上寻找到变量,我理解的闭包是一个对象,包含了**函数本身**以及它**引用的上下文环境**,本实例函数的闭包可以用这段代码来示意下:  
+`{Funtion:bar, bar.variableObject:{c=12, ...},  foo.variableObject:{b=4, ...},window/global.variableObject:{a=2, ...}}`  
+
+> 闭包只是javascript函数作用域产生的附属品
 
 
 
