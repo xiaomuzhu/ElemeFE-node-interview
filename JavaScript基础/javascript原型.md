@@ -53,7 +53,7 @@ console.log(Object.prototype.isPrototypeOf(obj)); //true
 ```
 
 ---
-####　３．原型链
+### ３．原型链
 
 在我们了解了`__proto__`与`[[Prototype]]`之后,就可以相对容易理解原型链了,由于`__proto__`与`[[Prototype]]`功能相似,但是`__proto__`更容易测试方便学习,我们选择`__proto__`来进行原型链的讲解.
 

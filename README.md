@@ -1,24 +1,26 @@
-# 如何通过饿了么 Node.js 面试
+# 如何通过饿了么 Node.js 面试(解答)
 
-Hi, 欢迎来到 ElemeFE, 如标题所示本教程的目的是教你如何通过饿了么大前端的面试, 职位是 2~3 年经验的 Node.js 服务端程序员 (并不是全栈), 如果你对这个职位感兴趣或者学习 Node.js 一些进阶的内容, 那么欢迎围观.
+本项目是基于[饿了么node面试](https://github.com/ElemeFE/node-interview)而来,对上述教程中提出的问题进行了解答,本项目是为了记录本人对Node知识点的总结,,没有权威性如有错误欢迎指出.    
 
 ## 导读
 
-虽然说目的是要通过面试, 但是本教程并不是简单的把所有面试题列出来, 而**主要是将面试中需要确认你是否懂的点列举出来**, 并进行一定程度的讨论.
+本项目虽然是基于**饿了么Node面试教程**而来,但是在此基础上做了拓展,比如在**JS基础**部分加入了**面向对象** **原型链**等重要知识.    
 
-本文将一些常见的问题划分归类, 每类标明涵盖的一些`覆盖点`, 并且列举几个`常见问题`, 通常这些问题都是 2~3 年工作经验需要了解或者面对的. 如果你对某类问题感兴趣, 或者想知道其中列举问题的答案, 可以通过该类下方的 `阅读更多` 查看更多的内容.
 
-整体上大纲列举的并不是很全面, 细节上覆盖率不高, 很多讨论只是点到即止, 希望大家带着问题去思考.
-
-## [Js 基础问题](/sections/zh-cn/common.md)
+## [Js 基础问题]
 
 > 与前端 Js 不同, 后端是直面服务器的, 更加偏向内存方面.
-
-* [`[Basic]` 类型判断](/sections/zh-cn/common.md#类型判断)
-* [`[Basic]` 作用域](/sections/zh-cn/common.md#作用域)
-* [`[Basic]` 引用传递](/sections/zh-cn/common.md#引用传递)
-* [`[Basic]` 内存释放](/sections/zh-cn/common.md#内存释放)
-* [`[Basic]` ES6 新特性](/sections/zh-cn/common.md#es6-新特性)
+以下已完成
+* [`[Basic]` 类型判断](/JavaScript基础/JavaScript基本类型.md)
+* [`[Basic]` 预解释](/JavaScript基础/javascript“预解释”.md)
+* [`[Basic]` 作用域](/JavaScript基础/javascript“作用域与闭包“.md)
+* [`[Basic]` 原型](/JavaScript基础/javascript原型.md)
+* [`[Basic]` this](/JavaScript基础/javascript中的this.md)
+* [`[Basic]` 属性](/JavaScript基础/javascript属性.md)
+* [`[Basic]` 传递引用](/JavaScript基础/javascript按什么传递.md)    
+以下未完成
+* [`[Basic]` 内存释放]()
+* [`[Basic]` ES6 新特性]()
 
 **常见问题**
 
