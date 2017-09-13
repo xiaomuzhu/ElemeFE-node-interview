@@ -172,20 +172,7 @@ console.log(typeof a); //string
 是什么原因造成了上述结果呢?那么我们得从ECMA-262中提到的转换规则和抽象操作说起,有兴趣的童鞋可以仔细阅读下这浩如烟海的[语言规范](http://ecma-international.org/ecma-262/5.1/),如果没这个耐心还是往下看.
 
 这是JavaScript种类型转换可以从**原始类型**转为**引用类型**,同样可以将**引用类型**转为**原始类型**,转为原始类型的抽象操作为`ToPrimitive`,而后续更加细分的操作为:`ToNumber ToString ToBoolean`,这三种抽象操作的转换表如下所示
-|值 |ToNumber|ToString |ToBoolean|
-|:---:|:---:|:---:|:---:|
-|undefined|	NaN|“undefined”|false|
-|null|	0|	“null”|	false|
-|true|	1|	“true”|	 
-|false|	0|	“false”	| 
-|0	 	|“0”	|false|
-|-0	 |	“0”|	false|
-|NaN	 |	“NaN”|	false|
-|Infinity|	 	|“Infinity”|	true|
-|-Infinity|	 	|”-Infinity”|	true|
-|1(非零)|	 |	“1”	|true|
-|`[ ](空数组)`|	0|	””|	true|
-|`[9](包含一个数字元素)`|	9|	“9”|	true|
+![](http://omrbgpqyl.bkt.clouddn.com/17-9-13/15517231.jpg)
 
 
 如果想应付面试,我觉得这张表就差不多了,但是为了更深入的探究JavaScript引擎是如何处理代码中类型转换问题的,就需要看 ECMA-262详细的规范,从而探究其内部原理,我们从这段内部原理示意代码开始.
