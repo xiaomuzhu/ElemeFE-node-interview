@@ -20,9 +20,7 @@ function f() {
 f();
 ```
 
-答案是undefined,我们在Atom编辑器内运行的结果如下:
-
-![Markdown](http://p1.bpimg.com/586294/b14e2d8434d1433b.png)
+答案是undefined.
 
 那么到底是什么原因导致了这个让人意外的结果呢?这就要从JavaScript解释阶段说起。
 
