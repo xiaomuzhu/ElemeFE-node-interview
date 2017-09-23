@@ -133,7 +133,7 @@ var g = function() {
 ```
 
 `f`成功被打印出来,而`g函数`出现了类型错误,这是什么原因呢?  
-![Markdown](http://p1.bpimg.com/586294/658277838f700ab6.png)
+
 
 ```javascript
 executionContextObj = {
