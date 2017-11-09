@@ -50,7 +50,7 @@ function foo(a) {
 foo(2); // 2, 4, 12
 ```
 以上实例中的作用域是什么样子的呢?  
-![Markdown](http://p1.bqimg.com/586294/d9c1fe993e874903.png)
+![](http://p1.bqimg.com/586294/d9c1fe993e874903.png)
 
 我们可以通过这张图清楚地看到一个函数的作用域包含着什么,而且由于JavaScript是采用静态作用域,作用域是在函数创建的时候就确定下来的.
 
