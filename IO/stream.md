@@ -1,5 +1,5 @@
 # Node中Stream(流)详解
- 
+
 ---
 
 ## 前言
@@ -8,10 +8,21 @@
 
 可以这么说,`Stream`是Node开发过程中无论如何都无法绕开的知识点,因为基于它的场景很多,我们应该尽可能理解`Stream`并掌握它的一些高级用法.
 
-    Stream 接口分成三类:
+    Stream 接口分成四类:
         可读数据流接口，用于对外提供数据。
         可写数据流接口，用于写入数据。
         双向数据流接口，用于读取和写入数据。
+        转换流接口,可读可写但不保存数据,负责数据转换
+
+
+```javascript
+var Stream = require('stream')
+
+var Readable = Stream.Readable
+var Writable = Stream.Writable
+var Duplex = Stream.Duplex
+var Transform = Stream.Transform
+```
 
 由于`Stream`基本方法较多,我们在本文中就不做过多介绍,相关的基本用法可以直接阅读[官方文档](http://nodejs.cn/api/stream.html#stream_two_modes).
 
@@ -40,20 +51,20 @@ Readable.prototype.resume = function() {
 ```
 在源码内部全部都是用`resume`方法来住触发flowing mode的(包括resume自身),而调用`resume`触发flowing mode的关键标志是`state.flowing`,源码通过`state.flowing`来判断是否调用`resume`.
 
-那么,这个`state.flowing`来自哪里呢?  
+那么,这个`state.flowing`来自哪里呢?
 
-其实`state.flowing`是来自于`_readableState`,`_readableState`同时是`ReadableState`的实例,由于源码量有千行我不便一一贴出来,[相关源码](https://github.com/nodejs/node/blob/master/lib/_stream_readable.js)可以自行查看,我们可以简单介绍下`ReadableState`.  
+其实`state.flowing`是来自于`_readableState`,`_readableState`同时是`ReadableState`的实例,由于源码量有千行我不便一一贴出来,[相关源码](https://github.com/nodejs/node/blob/master/lib/_stream_readable.js)可以自行查看,我们可以简单介绍下`ReadableState`.
 
-`ReadableState`其实是一个构造函数,用于记录`Readable`的各种状态和信息,例如读取模式、highWaterMask、编码(默认utf-8)、各种事件、缓冲区、flowing模式等.  
+`ReadableState`其实是一个构造函数,用于记录`Readable`的各种状态和信息,例如读取模式、highWaterMask、编码(默认utf-8)、各种事件、缓冲区、flowing模式等.
 
-可以说,Readable内部各种状态转换或者缓存读取等操作,都需要依赖`ReadableState`提供的信息支持.  
+可以说,Readable内部各种状态转换或者缓存读取等操作,都需要依赖`ReadableState`提供的信息支持.
 
 我们都知道可读流有三种状态:
 
         readable._readableState.flowing = null
         readable._readableState.flowing = false
         readable._readableState.flowing = true
-       
+
 我们调用上述`resume` `pipe`等方法可以改变状态,但是最初始的  ` readable._readableState.flowing = null` 状态就是在`ReadableState`中定义的.
 
 ```javascript
@@ -63,7 +74,7 @@ this.flowing = null;
 ...
 }
 ```
-   
+
 此时我们需要看一下Stream整个运行机制的示意图:
 
 ![](http://i1.piimg.com/567571/82c592bb2211a405.png)
@@ -74,7 +85,7 @@ this.flowing = null;
 >* 读缓存区:以数组的形式存在,主要存储着`Buffer`等数据缓存
 >* read:`read`方法将缓存中的数据读取,不直接从外部读取数据,而是读取读缓存区内的数据
 
-通过`push`等方法将数据压入读缓存区的过程中,数据会以`Buffer`的形式被存在数组里,因此在`read`后会出现`Buffer`的形式.  
+通过`push`等方法将数据压入读缓存区的过程中,数据会以`Buffer`的形式被存在数组里,因此在`read`后会出现`Buffer`的形式.
 ```javascript
 var Read = require('stream').Readable;
 var r = new Read();
@@ -103,7 +114,7 @@ Readable.prototype.push = function(chunk, encoding) {
     }
   }
 
-  return readableAddChunk(this, state, chunk, encoding, false); 
+  return readableAddChunk(this, state, chunk, encoding, false);
 };
 ```
 
@@ -250,7 +261,7 @@ r.on('data', function (chunk) {
 
 有了前面对Readable的分析,我们理解起Writeable就相对容易了很多,因为很多逻辑是相通的,无非是读入与输出的区别.
 
-我们再回到上面我们列举的Stream运行示意图中关于Writeable的部分.  
+我们再回到上面我们列举的Stream运行示意图中关于Writeable的部分.
 ![](http://i1.piimg.com/567571/b2eb4036eec3a0db.png)
 
 
@@ -320,7 +331,7 @@ function onwrite(stream, er) {
       clearBuffer(stream, state);
     }
 
-    if (sync) { 
+    if (sync) {
       process.nextTick(afterWrite, stream, state, finished, cb);
     } else {
       afterWrite(stream, state, finished, cb);
@@ -336,7 +347,3 @@ function onwrite(stream, er) {
 >* 2. `write`方法通过调用 `writeOrBuffer`管理写入写缓存区的操作,如果符合条件就写入缓存区.
 >* 3. 同时`writeOrBuffer`中`doWrite`方法负责将缓存区的数据输出,`doWrite`会调用`_write`方法,而`_write`会触发回调函数`state.onwrite`,`doWrite`首先调用`clearBuffer`方法将缓存区的数据依次输出并清空,随后触发`afterWrite`方法,进行判断是否结束可写流或者触发`drain`事件通知继续将数据写入可写流,再次进入步骤2的流程.
 >* 4. 直到触发`end`方法结束该可写流.
-
-
-
-
