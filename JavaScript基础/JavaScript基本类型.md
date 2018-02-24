@@ -6,7 +6,8 @@
 　　众所周知,JavaScript是动态弱类型的多范式编程语言,由于设计时的粗糙(当时设计js的初衷就是在浏览器中处理表单这种简单事件)导致JavaScript在许多方面表现出了这样或者那样的问题,其中'类型'便是语法层面最常见的'埋坑'重灾区.
 　　
 > JavaScript原始类型:Undefined、Null、Boolean、Number、String、Symbol 
-JavaScript引用类型:Object 
+
+> JavaScript引用类型:Object 
 
 ---
 
@@ -20,7 +21,7 @@ var person = 'Messi';
 var person1 = person;
 ```
 上述代码在栈内存的示意图是这样的,可以看到,虽然`person`赋值给了`person1`.但是两个变量并没有指向同一个值,而是`person1`自己单独建立一个内存空间,虽然两个变量的值相等,但却是相互独立的.
-![](http://p1.bqimg.com/567571/11993c9e172c8684.png)
+![](http://omrbgpqyl.bkt.clouddn.com/18-2-20/84377115.jpg)
 
 ```javascript
 var person = 'Messi';
@@ -33,7 +34,6 @@ console.log(person1); //'Messi'
 
 ```
 上述代码示意图是这样的,`person`的值虽然改变,但是由于`person1`的值是独立储存的,因此不受影响.
-![](http://p1.bqimg.com/567571/72d29c309b1d75ce.png)
 
 值得一提的是,虽然原始类型的值是储存在相对独立空间,但是它们之间的比较是**按值**比较的.
 
@@ -49,7 +49,6 @@ console.log(person === person1); //true
 剩下的就是引用类型了,即Object 类型,再往下细分，还可以分为：Object 类型、Array 类型、Date 类型、Function 类型 等。
 
 与原始类型不同的是,引用类型的内容是保存在**堆内存**中,而**栈内存**(Heap)中会有一个**堆内存地址**,通过这个地址变量被指向堆内存中`Object`真正的值,因此引用类型是按照引用访问的.
-![](http://p1.bpimg.com/567571/ade18e93a9f9e9cb.png)
 
 由于示意图太难画,我从网上找了一个例子,能很清楚的说明引用类型的特质.
 
@@ -73,8 +72,8 @@ console.log(a === c); //false
     1. `b = a`,如果是原始类型的话,`b`会在栈内自己独自创建一个内存空间保存值,但是引用类型只是`b`的产生一个对内存地址,指向堆内存中的`Object`.
     2.`a.name = "zyj"`,这个操作属于改变了变量的值,在原始类型中会重新建立新的内存空间(可以看上一节的示意图),而引用类型只需要自己在堆内存中更新自己的属性即可.
     3.最后创建了一个新的对象`c`,看似跟`b` `a`一样,但是在堆内存中确实两个相互独立的`Object`,引用类型是按照**引用比较**,由于`a` `c`引用的是不同的`Object`所以得到的结果是`fasle`.  
-![](http://i1.piimg.com/567571/86af0de8deea6301.png)
 
+![](http://omrbgpqyl.bkt.clouddn.com/18-2-20/34304948.jpg)
 ---
 #### 2. 类型中的坑
 
@@ -166,8 +165,7 @@ console.log(typeof a); //string
 ```
 
 
-答案是0,下图是在`node 7.7.2`版本测试下的结果,浏览器测试结果同上.  
-![](http://p1.bqimg.com/567571/8bd81ae2ea2f3921.png)
+答案是0
 
 是什么原因造成了上述结果呢?那么我们得从ECMA-262中提到的转换规则和抽象操作说起,有兴趣的童鞋可以仔细阅读下这浩如烟海的[语言规范](http://ecma-international.org/ecma-262/5.1/),如果没这个耐心还是往下看.
 
