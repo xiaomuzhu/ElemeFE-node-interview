@@ -115,8 +115,8 @@ immutable.js是正是兼顾了使用效果和性能的解决方案,它的解决�
 但是在使用过程中,immutable.js也存在很多问题.
 
 我目前碰到的坑有:
-1. 由于实现了完整的不可变数据,immutable.js的体积过于庞大,尤其在移动端这个情况被凸显出来.
-2. 全新的api+不友好的文档,immutable.js使用的是自己的一套api,因此我们对js原生数组、对象的操作统统需要抛弃重新学习，但是官方文档不友好，很多情况下需要自己去试api.
+1. 由于实现了完整的不可变数据,immutable.js的体积过于庞大,尤其在移动端这个情况被凸显出来.
+2. 全新的api+不友好的文档,immutable.js使用的是自己的一套api,因此我们对js原生数组、对象的操作统统需要抛弃重新学习，但是官方文档不友好，很多情况下需要自己去试api.
 3. 调试错误困难，immutable.js自成一体的数据结构,我们无法像读原生js一样读它的数据结构,很多情况下需要`toJS()`转化为原生数据结构再进行调试,这让人很崩溃.
 ![](http://omrbgpqyl.bkt.clouddn.com/18-2-21/25345459.jpg)
 
@@ -133,7 +133,7 @@ immutable.js在某种程度上来说,更适合于对数据可靠度要求颇高�
 
 我们要通过原生js的api来实现immutable,很显然我们需要对引用对象的set、get、delete等一系列操作的特性进行修改，这就需要`defineProperty`或者`Proxy`进行元编程.
 
-我们就以`Proxy`为例来进行编码,当然,我们需要事先了解一下`Proxy`的[使用方法](http://es6.ruanyifeng.com/#docs/proxy#Proxy-revocable).
+我们就以`Proxy`为例来进行编码,当然,我们需要事先了解一下`Proxy`的[使用方法](http://es6.ruanyifeng.com/#docs/proxy#Proxy-revocable).
 
 我们先定义一个目标对象
 ```javascript
@@ -212,7 +212,7 @@ createState.prototype = {
     return Object.assign({}, value);
   }
 ```
-3. 最后我们就可以利用构造函数`createState`接受目标对象`state`生成对象`store`,然后我们就可以用`Proxy`代理`store`,`producer`是外部传进来的操作函数,当`producer`对代理对象进行操作的时候我们就可以通过事先设定好的`handler`进行代理操作了.
+3. 最后我们就可以利用构造函数`createState`接受目标对象`state`生成对象`store`,然后我们就可以用`Proxy`代理`store`,`producer`是外部传进来的操作函数,当`producer`对代理对象进行操作的时候我们就可以通过事先设定好的`handler`进行代理操作了.
 
 ```JavaScript
   const PROXY_STATE = Symbol('proxy-state');
