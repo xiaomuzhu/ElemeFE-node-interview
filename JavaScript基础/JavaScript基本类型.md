@@ -21,6 +21,7 @@ var person = 'Messi';
 var person1 = person;
 ```
 上述代码在栈内存的示意图是这样的,可以看到,虽然`person`赋值给了`person1`.但是两个变量并没有指向同一个值,而是`person1`自己单独建立一个内存空间,虽然两个变量的值相等,但却是相互独立的.
+
 ![](http://omrbgpqyl.bkt.clouddn.com/18-2-20/84377115.jpg)
 
 ```javascript

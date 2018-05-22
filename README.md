@@ -1,6 +1,6 @@
 # 如何通过饿了么 Node.js 面试(解答)
 
-> *听说饿了么被阿里收购了,饿了么虽然没了,文档还是要更的...*
+> *听说饿了么被阿里收购了,饿了么虽然没了,文档还是要更的...*
 
 本项目是基于[饿了么node面试](https://github.com/ElemeFE/node-interview)而来,对上述教程中提出的问题进行了解答,本项目是为了记录本人对Node知识点的总结,没有权威性如有错误欢迎指出.
 
@@ -29,7 +29,7 @@
 
 * [`[Basic]` Promise](https://github.com/xieranmaya/blog/issues/3)
 * [`[Basic]` Events (事件机制)](/异步/Event.md)
-* [`[Basic]` 实现一个Event](/异步/如何实现一个Event.md)
+* [`[Basic]` 实现一个Event](/异步/如何实现一个Event.md)
 * [`[Basic]` 阻塞/异步](/异步/异步机制.md)
 
 ## [IO]
