@@ -20,9 +20,10 @@
 * [`[Basic]` 原型](/JavaScript基础/javascript原型.md)
 * [`[Basic]` this](/JavaScript基础/javascript中的this.md)
 * [`[Basic]` 属性](/JavaScript基础/javascript属性.md)
-* [`[Basic]` 传递引用](/JavaScript基础/javascript按什么传递.md)    
+* [`[Basic]` 传递引用](/JavaScript基础/javascript按什么传递.md)
 * [`[Basic]` 深克隆](/JavaScript基础/javascript实现深克隆.md)
 * [`[Basic]` 实现不可变数据](/JavaScript基础/JavaScript中的不可变数据.md)
+* [`[Basic]` Proxy 与Object.defineProperty 的双向绑定对比](/JavaScript基础/Proxy.md)
 
 ## 事件/异步
 
@@ -31,17 +32,11 @@
 * [`[Basic]` 实现一个Event](/异步/如何实现一个Event.md)
 * [`[Basic]` 阻塞/异步](/异步/异步机制.md)
 
-
 ## [IO]
 
 * [`[Doc]` Buffer详解](/IO/Buffer.md)
 * [`[Doc]` Stream (流)](/IO/stream.md)
 
-
 ## [进程]
 
 * [`[Doc]` 类Unix系统中的进程](/Process/Unix-Process.md)
-
-## [前端框架设计]
-
-* [`[Doc]` 虚拟Dom的实现](/Framework/V-DOM.md)
