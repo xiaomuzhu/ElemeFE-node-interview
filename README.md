@@ -22,7 +22,7 @@
 * [`[Basic]` 属性](/JavaScript基础/javascript属性.md)
 * [`[Basic]` 传递引用](/JavaScript基础/javascript按什么传递.md)
 * [`[Basic]` 深克隆](/JavaScript基础/javascript实现深克隆.md)
-* [`[Basic]` 实现不可变数据](/JavaScript基础/JavaScript中的不可变数据.md)
+* [`[Basic]` 实现不可变数据](/JavaScript基础/JavaScript中的不可变数据.md)
 * [`[Basic]` Proxy 与Object.defineProperty 的双向绑定对比](/JavaScript基础/Proxy.md)
 
 ## 事件/异步
